@@ -132,40 +132,15 @@ const StudentClassroom = () => {
     <AppLayout>
       <div className="space-y-6">
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-sm border p-6">
-          <div className="flex items-center space-x-4 mb-4">
-            <Link
-              to="/student"
-              className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              <ArrowLeft className="h-5 w-5 mr-2" />
-              Back to Dashboard
-            </Link>
-          </div>
-          
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 dark:from-blue-700 dark:to-indigo-800 text-white p-6 rounded-xl shadow-sm transition-colors duration-300">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Classroom</h1>
-              <p className="text-gray-600 mt-1">
+              <h1 className="text-2xl font-bold mb-2">Classroom </h1>
+              <p className="text-blue-100">
                 Welcome back, {user?.name?.split(' ')[0]}! You have {enrolledClasses.length} enrolled classes.
               </p>
             </div>
-            <div className="mt-4 sm:mt-0 flex items-center space-x-3">
-              <Link
-                to="/student"
-                className="inline-flex items-center px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                <Home className="h-4 w-4 mr-2" />
-                Dashboard
-              </Link>
-              <Link
-                to="/student/submit"
-                className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Submit Work
-              </Link>
-            </div>
+
           </div>
         </div>
 
@@ -272,7 +247,7 @@ const StudentClassroom = () => {
                       </button>
                     </div>
                     <Link
-                      to={`/student/class/${classItem.id}`}
+                      to={`/student/classroom/${classItem.id}`}
                       className="text-sm text-blue-600 hover:text-blue-800 font-medium"
                     >
                       View Class

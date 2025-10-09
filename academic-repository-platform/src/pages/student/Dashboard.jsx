@@ -129,11 +129,11 @@ const StudentDashboard = () => {
       description: 'Awaiting feedback'
     },
     {
-      title: 'Average Grade',
-      value: 'A-',
-      icon: <Award className="h-5 w-5" />,
-      color: 'info',
-      description: 'Current semester'
+      title: 'Pending Assignments',
+      value: 5,
+      icon: <AlertCircle className="h-5 w-5" />,
+      color: 'warning',
+      description: 'Due this week'
     }
   ];
 
@@ -141,7 +141,7 @@ const StudentDashboard = () => {
     <AppLayout>
       <div className="space-y-6">
         {/* Welcome Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 rounded-xl shadow-sm">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 dark:from-blue-700 dark:to-indigo-800 text-white p-6 rounded-xl shadow-sm transition-colors duration-300">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between">
             <div>
               <h1 className="text-2xl font-bold mb-2">
@@ -170,17 +170,17 @@ const StudentDashboard = () => {
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Recent Submissions */}
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-sm border">
-              <div className="p-6 border-b border-gray-200">
+            <div className="lg:col-span-2">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border dark:border-gray-700 transition-colors duration-300">
+              <div className="p-6 border-b border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-gray-900 flex items-center">
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
                     <FileText className="h-5 w-5 mr-2" />
                     Recent Submissions
                   </h2>
                   <Link
                     to="/student/submissions"
-                    className="text-sm text-blue-600 hover:text-blue-800"
+                    className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
                   >
                     View all
                   </Link>
@@ -190,24 +190,24 @@ const StudentDashboard = () => {
               <div className="divide-y divide-gray-200">
                 {loading ? (
                   Array.from({ length: 3 }).map((_, i) => (
-                    <div key={i} className="p-6 animate-pulse">
-                      <div className="flex items-center space-x-4">
-                        <div className="w-10 h-10 bg-gray-200 rounded-lg"></div>
-                        <div className="flex-1 space-y-2">
-                          <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                          <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                      <div key={i} className="p-6 animate-pulse">
+                        <div className="flex items-center space-x-4">
+                          <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+                          <div className="flex-1 space-y-2">
+                            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                            <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                          </div>
                         </div>
                       </div>
-                    </div>
                   ))
                 ) : recentSubmissions.length === 0 ? (
                   <div className="p-12 text-center">
                     <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">No submissions yet</h3>
-                    <p className="text-gray-600 mb-4">Start by submitting your first project</p>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No submissions yet</h3>
+                    <p className="text-gray-600 dark:text-gray-300 mb-4">Start by submitting your first project</p>
                     <Link
                       to="/student/submit"
-                      className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                      className="inline-flex items-center px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-800 transition-colors"
                     >
                       <Plus className="h-4 w-4 mr-2" />
                       Submit Project
@@ -219,7 +219,7 @@ const StudentDashboard = () => {
                     const StatusIcon = statusConfig.icon;
 
                     return (
-                      <div key={submission.id} className="p-6 hover:bg-gray-50 transition-colors">
+                      <div key={submission.id} className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                         <div className="flex items-start space-x-4">
                           <div className={`p-2 rounded-lg ${statusConfig.bg}`}>
                             <StatusIcon className={`h-5 w-5 ${statusConfig.color}`} />
@@ -227,7 +227,7 @@ const StudentDashboard = () => {
 
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between mb-2">
-                              <h3 className="text-sm font-medium text-gray-900 truncate">
+                              <h3 className="text-sm font-medium text-gray-900 dark:text-white truncate">
                                 {submission.title}
                               </h3>
                               <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${statusConfig.bg} ${statusConfig.color}`}>
@@ -235,7 +235,7 @@ const StudentDashboard = () => {
                               </span>
                             </div>
 
-                            <div className="flex items-center space-x-4 text-sm text-gray-500 mb-2">
+                            <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400 mb-2">
                               <span className="flex items-center">
                                 <BookOpen className="h-4 w-4 mr-1" />
                                 {submission.course}
@@ -253,16 +253,16 @@ const StudentDashboard = () => {
                             </div>
 
                             {submission.feedback && (
-                              <div className="mt-2 p-3 bg-gray-50 rounded-md">
+                              <div className="mt-2 p-3 bg-gray-50 dark:bg-gray-700 rounded-md">
                                 <div className="flex items-start space-x-2">
                                   <MessageSquare className="h-4 w-4 text-gray-400 mt-0.5" />
-                                  <p className="text-sm text-gray-700">{submission.feedback}</p>
+                                  <p className="text-sm text-gray-700 dark:text-gray-300">{submission.feedback}</p>
                                 </div>
                               </div>
                             )}
                           </div>
 
-                          <button className="p-2 text-gray-400 hover:text-gray-600 transition-colors">
+                          <button className="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
                             <Eye className="h-4 w-4" />
                           </button>
                         </div>
@@ -276,8 +276,17 @@ const StudentDashboard = () => {
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* Upcoming Deadlines */}
+
+             <div className="bg-white rounded-lg shadow-sm border">
+              <div className="p-4 border-b border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+                  <Calendar className="h-5 w-5 mr-2" />
+                  Upcoming Deadlines
+                </h3>
+              </div>
             {/* Quick Actions */}
-            <div className="bg-white rounded-lg shadow-sm border p-6">
+            {/* <div className="bg-white rounded-lg shadow-sm border p-6">
               <div className="flex items-start space-x-4">
                 <div className="p-3 bg-gray-100 rounded-lg">
                   <BookOpen className="h-6 w-6 text-gray-600" />
@@ -293,16 +302,7 @@ const StudentDashboard = () => {
                   </Link>
                 </div>
               </div>
-            </div>
-
-            {/* Upcoming Deadlines */}
-            <div className="bg-white rounded-lg shadow-sm border">
-              <div className="p-4 border-b border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900 flex items-center">
-                  <Calendar className="h-5 w-5 mr-2" />
-                  Upcoming Deadlines
-                </h3>
-              </div>
+            </div> */}
 
               <div className="p-4 space-y-3">
                 {upcomingDeadlines.length === 0 ? (

@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Bell, Menu, User, Settings, LogOut, ChevronDown } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth.jsx';
+import ThemeToggle from '../ui/ThemeToggle';
 import logoImage from '../../assets/images/logo.png';
 
 const mockNotifications = [
@@ -72,14 +73,14 @@ const Header = ({ onMenuClick }) => {
   const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
-    <header className="bg-white border-b border-gray-200 shadow-sm px-6 py-4 flex-shrink-0">
+    <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm px-6 py-4 flex-shrink-0 transition-colors duration-300">
       <div className="flex items-center justify-between">
         {/* Left side - Logo and Search */}
         <div className="flex items-center space-x-6 flex-1">
           {/* Mobile menu button */}
           <button
             onClick={onMenuClick}
-            className="lg:hidden p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+            className="lg:hidden p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
           >
             <Menu className="w-5 h-5" />
           </button>
@@ -94,33 +95,24 @@ const Header = ({ onMenuClick }) => {
               />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-gray-900">BML Munjal University</h1>
-              <p className="text-xs text-gray-500">Academic Platform</p>
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white">BML Munjal University</h1>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Academic Platform</p>
             </div>
           </div>
 
           {/* Search bar */}
-          <form onSubmit={handleSearch} className="flex-1 max-w-xl">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-gray-500"
-                placeholder="Search projects, papers, users..."
-              />
-            </div>
-          </form>
+        
         </div>
 
-        {/* Right side - Notifications and User Menu */}
+        {/* Right side - Theme Toggle, Notifications and User Menu */}
         <div className="flex items-center space-x-3">
+          {/* Theme Toggle */}
+          <ThemeToggle />
           {/* Notifications */}
           <div className="relative" ref={notificationRef}>
             <button
               onClick={() => setShowNotifications(!showNotifications)}
-              className="relative p-2.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+              className="relative p-2.5 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
             >
               <Bell className="w-5 h-5" />
               {unreadCount > 0 && (
@@ -131,24 +123,24 @@ const Header = ({ onMenuClick }) => {
             </button>
 
             {showNotifications && (
-              <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-xl ring-1 ring-gray-200 z-50">
-                <div className="p-4 border-b border-gray-100">
-                  <h3 className="text-sm font-semibold text-gray-900">Notifications</h3>
+              <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-xl ring-1 ring-gray-200 dark:ring-gray-700 z-50 transition-colors duration-300">
+                <div className="p-4 border-b border-gray-100 dark:border-gray-700">
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Notifications</h3>
                 </div>
                 
                 <div className="max-h-64 overflow-y-auto">
                   {notifications.map((notification) => (
                     <div
                       key={notification.id}
-                      className={`p-4 border-b border-gray-50 hover:bg-gray-50 cursor-pointer transition-colors ${!notification.read ? 'bg-blue-50' : ''}`}
+                      className={`p-4 border-b border-gray-50 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors ${!notification.read ? 'bg-blue-50 dark:bg-blue-900/20' : ''}`}
                       onClick={() => markAsRead(notification.id)}
                     >
                       <div className="flex items-start space-x-3">
                         <div className={`w-2 h-2 rounded-full mt-2 ${!notification.read ? 'bg-blue-500' : 'bg-gray-300'}`} />
                         <div className="flex-1">
-                          <p className="text-sm font-medium text-gray-900">{notification.title}</p>
-                          <p className="text-sm text-gray-600 mt-1">{notification.message}</p>
-                          <p className="text-xs text-gray-400 mt-1">{formatTimeAgo(notification.createdAt)}</p>
+                          <p className="text-sm font-medium text-gray-900 dark:text-white">{notification.title}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">{notification.message}</p>
+                          <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{formatTimeAgo(notification.createdAt)}</p>
                         </div>
                       </div>
                     </div>
@@ -162,7 +154,7 @@ const Header = ({ onMenuClick }) => {
           <div className="relative" ref={userMenuRef}>
             <button
               onClick={() => setShowUserMenu(!showUserMenu)}
-              className="flex items-center space-x-3 p-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+              className="flex items-center space-x-3 p-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
             >
               <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center shadow-sm">
                 <span className="text-sm font-semibold text-white">
@@ -170,52 +162,39 @@ const Header = ({ onMenuClick }) => {
                 </span>
               </div>
               <div className="hidden md:block text-left">
-                <p className="text-sm font-medium text-gray-900">{user?.name}</p>
-                <p className="text-xs text-gray-500 capitalize">{user?.role}</p>
+                <p className="text-sm font-medium text-gray-900 dark:text-white">{user?.name}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">{user?.role}</p>
               </div>
               <ChevronDown className="w-4 h-4 text-gray-400" />
             </button>
 
             {showUserMenu && (
-              <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl ring-1 ring-gray-200 z-50">
+              <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-xl ring-1 ring-gray-200 dark:ring-gray-700 z-50 transition-colors duration-300">
                 <div className="p-3">
-                  <div className="px-3 py-3 border-b border-gray-100">
-                    <p className="text-sm font-medium text-gray-900">{user?.name}</p>
-                    <p className="text-xs text-gray-500">{user?.email}</p>
-                    <p className="text-xs text-blue-600 capitalize font-medium mt-1">{user?.role}</p>
+                  <div className="px-3 py-3 border-b border-gray-100 dark:border-gray-700">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">{user?.name}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{user?.email}</p>
+                    <p className="text-xs text-blue-600 dark:text-blue-400 capitalize font-medium mt-1">{user?.role}</p>
                   </div>
                   
                   <div className="py-2">
                     <Link
-                      to="/profile"
-                      className="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                      to={`/${user?.role}/profile`}
+                      className="flex items-center px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
                       onClick={() => setShowUserMenu(false)}
                     >
-                      <User className="w-4 h-4 mr-3 text-gray-400" />
+                      <User className="w-4 h-4 mr-3 text-gray-400 dark:text-gray-500" />
                       Profile Settings
                     </Link>
                     
                     <Link
-                      to="/settings"
-                      className="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                      to={`/${user?.role}/settings`}
+                      className="flex items-center px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
                       onClick={() => setShowUserMenu(false)}
                     >
-                      <Settings className="w-4 h-4 mr-3 text-gray-400" />
+                      <Settings className="w-4 h-4 mr-3 text-gray-400 dark:text-gray-500" />
                       Preferences
                     </Link>
-                  </div>
-                  
-                  <div className="pt-2 border-t border-gray-100">
-                    <button
-                      onClick={() => {
-                        logout();
-                        setShowUserMenu(false);
-                      }}
-                      className="flex items-center w-full px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                    >
-                      <LogOut className="w-4 h-4 mr-3" />
-                      Sign Out
-                    </button>
                   </div>
                 </div>
               </div>

@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Search, Filter, Grid, List, Bookmark, BookmarkCheck, Eye, Download, ExternalLink, Star, Calendar, User, FileText, TrendingUp } from 'lucide-react';
+import { Search, Filter, Grid, List, Bookmark, BookmarkCheck, Eye, Download, ExternalLink, Star, Calendar, User, FileText, TrendingUp, X, GitBranch, Code, Folder, Tag, Clock, Award, CheckCircle } from 'lucide-react';
 import AppLayout from '../components/layout/AppLayout';
 import DataTable from '../components/ui/DataTable';
 import { useRepositoryData } from '../hooks/useRepositoryData';
@@ -11,6 +11,7 @@ const Repository = () => {
 
     const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
     const [searchQuery, setSearchQuery] = useState('');
+    const [selectedProject, setSelectedProject] = useState(null); // For detail modal
     const [filters, setFilters] = useState({
         department: '',
         year: '',
@@ -81,10 +82,7 @@ const Repository = () => {
 
     const getStatusColor = (status) => {
         switch (status) {
-            case 'approved': return 'bg-emerald-100 text-emerald-800 border-emerald-200';
-            case 'pending': return 'bg-amber-100 text-amber-800 border-amber-200';
-            case 'rejected': return 'bg-red-100 text-red-800 border-red-200';
-            case 'resubmit': return 'bg-orange-100 text-orange-800 border-orange-200';
+            case 'approved': return 'bg-emerald-100 text-emerald-800 border-emerald-200';   
             default: return 'bg-gray-100 text-gray-800 border-gray-200';
         }
     };
@@ -92,9 +90,6 @@ const Repository = () => {
     const getTypeColor = (type) => {
         switch (type) {
             case 'project': return 'bg-blue-100 text-blue-800 border-blue-200';
-            case 'research': return 'bg-purple-100 text-purple-800 border-purple-200';
-            case 'assignment': return 'bg-indigo-100 text-indigo-800 border-indigo-200';
-            case 'proposal': return 'bg-pink-100 text-pink-800 border-pink-200';
             default: return 'bg-gray-100 text-gray-800 border-gray-200';
         }
     };
@@ -102,11 +97,47 @@ const Repository = () => {
     const getTypeIcon = (type) => {
         switch (type) {
             case 'project': return <FileText className="w-3 h-3" />;
-            case 'research': return <TrendingUp className="w-3 h-3" />;
-            case 'assignment': return <FileText className="w-3 h-3" />;
-            case 'proposal': return <Star className="w-3 h-3" />;
             default: return <FileText className="w-3 h-3" />;
         }
+    };
+
+    const getFileIcon = (fileName) => {
+        const ext = fileName.split('.').pop().toLowerCase();
+        switch (ext) {
+            case 'pdf': return <FileText className="h-5 w-5 text-red-600" />;
+            case 'zip': 
+            case 'rar': 
+            case '7z': return <Folder className="h-5 w-5 text-yellow-600" />;
+            case 'doc':
+            case 'docx': return <FileText className="h-5 w-5 text-blue-600" />;
+            case 'ppt':
+            case 'pptx': return <FileText className="h-5 w-5 text-orange-600" />;
+            case 'xls':
+            case 'xlsx':
+            case 'csv': return <FileText className="h-5 w-5 text-green-600" />;
+            case 'java':
+            case 'py':
+            case 'js':
+            case 'cpp':
+            case 'c': return <Code className="h-5 w-5 text-purple-600" />;
+            default: return <FileText className="h-5 w-5 text-gray-600" />;
+        }
+    };
+
+    const formatFileSize = (bytes) => {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+    };
+
+    const formatDate = (date) => {
+        return new Intl.DateTimeFormat('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        }).format(new Date(date));
     };
 
     // Table columns for list view
@@ -167,7 +198,10 @@ const Repository = () => {
             render: (_, item) => (
                 <div className="flex items-center space-x-1">
                     <button
-                        onClick={() => toggleBookmark(item.id)}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            toggleBookmark(item.id);
+                        }}
                         className={`p-2 rounded-lg transition-colors ${
                             bookmarks.includes(item.id) 
                                 ? 'text-yellow-600 bg-yellow-50 hover:bg-yellow-100' 
@@ -182,6 +216,10 @@ const Repository = () => {
                         )}
                     </button>
                     <button 
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedProject(item);
+                        }}
                         className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
                         title="View details"
                     >
@@ -200,6 +238,7 @@ const Repository = () => {
                             rel="noopener noreferrer"
                             className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
                             title="View on GitHub"
+                            onClick={(e) => e.stopPropagation()}
                         >
                             <ExternalLink className="w-4 h-4" />
                         </a>
@@ -271,7 +310,13 @@ const Repository = () => {
 
             <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                    <button className="flex items-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors">
+                    <button 
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedProject(item);
+                        }}
+                        className="flex items-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                    >
                         <Eye className="w-4 h-4" />
                         <span>View</span>
                     </button>
@@ -285,6 +330,7 @@ const Repository = () => {
                         href={item.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
                         className="flex items-center space-x-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-lg transition-colors"
                     >
                         <ExternalLink className="w-4 h-4" />
@@ -320,16 +366,7 @@ const Repository = () => {
                                 Discover and explore a comprehensive collection of academic work, research papers, 
                                 projects, and scholarly contributions from our university community.
                             </p>
-                            <div className="flex items-center space-x-6 mt-4 text-sm text-gray-500">
-                                <div className="flex items-center space-x-1">
-                                    <FileText className="w-4 h-4" />
-                                    <span>{submissions.length} Total Submissions</span>
-                                </div>
-                                <div className="flex items-center space-x-1">
-                                    <Star className="w-4 h-4" />
-                                    <span>{bookmarks.length} Bookmarked</span>
-                                </div>
-                            </div>
+                           
                         </div>
                         <div className="flex items-center space-x-3">
                             <button
@@ -465,17 +502,7 @@ const Repository = () => {
                 </div>
 
                 {/* Results Summary */}
-                <div className="flex items-center justify-between bg-white p-4 rounded-lg border border-gray-200">
-                    <p className="text-gray-600 font-medium">
-                        <span className="text-indigo-600 font-semibold">{filteredSubmissions.length}</span> result{filteredSubmissions.length !== 1 ? 's' : ''} found
-                        {searchQuery && <span className="ml-1">for "{searchQuery}"</span>}
-                    </p>
-                    {filteredSubmissions.length > 0 && (
-                        <div className="text-sm text-gray-500">
-                            Showing {viewMode === 'grid' ? 'grid' : 'list'} view
-                        </div>
-                    )}
-                </div>
+             
 
                 {/* Content */}
                 {viewMode === 'grid' ? (
@@ -513,6 +540,227 @@ const Repository = () => {
                     </div>
                 )}
             </div>
+
+            {/* Project Detail Modal */}
+            {selectedProject && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 overflow-y-auto">
+                    <div className="bg-white rounded-lg shadow-xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+                        {/* Modal Header */}
+                        <div className="sticky top-0 bg-gradient-to-r from-indigo-600 to-purple-700 text-white p-6 z-10">
+                            <div className="flex justify-between items-start">
+                                <div className="flex-1">
+                                    <div className="flex items-center space-x-3 mb-2">
+                                        <span className="px-3 py-1 bg-white bg-opacity-20 text-black text-sm font-medium rounded">
+                                            {selectedProject.metadata?.year || 'N/A'}
+                                        </span>
+                                        <span className="px-3 py-1 bg-white bg-opacity-20 text-black text-sm font-medium rounded capitalize">
+                                            {selectedProject.type}
+                                        </span>
+                                        <span className={`px-3 py-1 text-sm font-medium rounded ${getStatusColor(selectedProject.status)}`}>
+                                            {selectedProject.status}
+                                        </span>
+                                    </div>
+                                    <h2 className="text-2xl font-bold mb-2">{selectedProject.title}</h2>
+                                    <div className="flex items-center space-x-4 text-indigo-100">
+                                        <span className="flex items-center">
+                                            <User className="h-4 w-4 mr-2" />
+                                            {selectedProject.submitter?.name || 'Unknown Student'}
+                                        </span>
+                                        <span>•</span>
+                                        <span>{selectedProject.metadata?.department || 'N/A'}</span>
+                                        <span>•</span>
+                                        <span>{selectedProject.metadata?.course || 'N/A'}</span>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setSelectedProject(null)}
+                                    className="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors"
+                                >
+                                    <X className="h-6 w-6" />
+                                </button>
+                            </div>
+
+                            {/* Stats Bar */}
+                            <div className="grid grid-cols-3 gap-4 mt-4">
+                                <div className="text-center">
+                                    <Calendar className="h-5 w-5 mx-auto mb-1" />
+                                    <p className="text-sm font-bold">{formatDate(selectedProject.createdAt)}</p>
+                                    <p className="text-xs text-indigo-100">Uploaded</p>
+                                </div>
+                                <div className="text-center">
+                                    <Clock className="h-5 w-5 mx-auto mb-1" />
+                                    <p className="text-sm font-bold">{formatDate(selectedProject.updatedAt)}</p>
+                                    <p className="text-xs text-indigo-100">Last Updated</p>
+                                </div>
+                                <div className="text-center">
+                                    <CheckCircle className="h-5 w-5 mx-auto mb-1 fill-current" />
+                                    <p className="text-sm font-bold capitalize">{selectedProject.status}</p>
+                                    <p className="text-xs text-indigo-100">Status</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Modal Body */}
+                        <div className="p-6 space-y-6">
+                            {/* Description */}
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-900 mb-3">Project Description</h3>
+                                <p className="text-gray-700 leading-relaxed">{selectedProject.description || 'No description available.'}</p>
+                            </div>
+
+                            {/* Links */}
+                            {selectedProject.githubUrl && (
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+                                        <GitBranch className="h-5 w-5 mr-2 text-gray-900" />
+                                        Source Code
+                                    </h3>
+                                    <a
+                                        href={selectedProject.githubUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
+                                    >
+                                        <GitBranch className="h-5 w-5 mr-2" />
+                                        View on GitHub
+                                        <ExternalLink className="h-4 w-4 ml-2" />
+                                    </a>
+                                </div>
+                            )}
+
+                            {/* Tags */}
+                            {selectedProject.tags && selectedProject.tags.length > 0 && (
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+                                        <Tag className="h-5 w-5 mr-2 text-blue-600" />
+                                        Tags
+                                    </h3>
+                                    <div className="flex flex-wrap gap-2">
+                                        {selectedProject.tags.map((tag, index) => (
+                                            <span
+                                                key={index}
+                                                className="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full"
+                                            >
+                                                #{tag}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Project Files */}
+                            {selectedProject.files && selectedProject.files.length > 0 && (
+                                <div>
+                                    <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+                                        <Folder className="h-5 w-5 mr-2 text-yellow-600" />
+                                        Project Files ({selectedProject.files.length})
+                                    </h3>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        {selectedProject.files.map((file, index) => (
+                                            <div
+                                                key={index}
+                                                className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer group transition-all"
+                                            >
+                                                <div className="flex items-center space-x-3">
+                                                    {getFileIcon(file.name)}
+                                                    <div>
+                                                        <p className="text-sm font-medium text-gray-900">{file.name}</p>
+                                                        <p className="text-xs text-gray-500">
+                                                            {file.size ? formatFileSize(file.size) : 'Unknown size'}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <Download className="h-5 w-5 text-gray-400 group-hover:text-indigo-600 transition-colors" />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Academic Information */}
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+                                    <Award className="h-5 w-5 mr-2 text-purple-600" />
+                                    Academic Information
+                                </h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div className="p-4 bg-gray-50 rounded-lg">
+                                        <p className="text-xs text-gray-500 mb-1">Department</p>
+                                        <p className="text-sm font-medium text-gray-900">
+                                            {selectedProject.metadata?.department || 'Not specified'}
+                                        </p>
+                                    </div>
+                                    <div className="p-4 bg-gray-50 rounded-lg">
+                                        <p className="text-xs text-gray-500 mb-1">Course</p>
+                                        <p className="text-sm font-medium text-gray-900">
+                                            {selectedProject.metadata?.course || 'Not specified'}
+                                        </p>
+                                    </div>
+                                    <div className="p-4 bg-gray-50 rounded-lg">
+                                        <p className="text-xs text-gray-500 mb-1">Academic Year</p>
+                                        <p className="text-sm font-medium text-gray-900">
+                                            {selectedProject.metadata?.year || 'Not specified'}
+                                        </p>
+                                    </div>
+                                    <div className="p-4 bg-gray-50 rounded-lg">
+                                        <p className="text-xs text-gray-500 mb-1">Project Type</p>
+                                        <p className="text-sm font-medium text-gray-900 capitalize">
+                                            {selectedProject.type}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Student/Submitter Info */}
+                            <div>
+                                <h3 className="text-lg font-semibold text-gray-900 mb-3 flex items-center">
+                                    <User className="h-5 w-5 mr-2 text-green-600" />
+                                    Submitted By
+                                </h3>
+                                <div className="p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg">
+                                    <div className="flex items-center space-x-4">
+                                        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
+                                            <User className="h-6 w-6 text-gray-600" />
+                                        </div>
+                                        <div>
+                                            <p className="font-semibold text-gray-900">
+                                                {selectedProject.submitter?.name || 'Unknown Student'}
+                                            </p>
+                                            <p className="text-sm text-gray-600">
+                                                {selectedProject.submitter?.email || 'No email available'}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Bookmark Button */}
+                            <div className="flex justify-end pt-4 border-t">
+                                <button
+                                    onClick={() => toggleBookmark(selectedProject.id)}
+                                    className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-all ${
+                                        bookmarks.includes(selectedProject.id)
+                                            ? 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
+                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    }`}
+                                >
+                                    {bookmarks.includes(selectedProject.id) ? (
+                                        <>
+                                            <BookmarkCheck className="h-5 w-5" />
+                                            <span>Bookmarked</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Bookmark className="h-5 w-5" />
+                                            <span>Add Bookmark</span>
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </AppLayout>
     );
 };

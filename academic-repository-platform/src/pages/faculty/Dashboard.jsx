@@ -10,7 +10,8 @@ import {
   BarChart3,
   Eye,
   MessageSquare,
-  Award
+  Award,
+  BookOpen
 } from 'lucide-react';
 import AppLayout from '../../components/layout/AppLayout';
 import { StatsGrid } from '../../components/ui/DashboardCard';
@@ -39,7 +40,7 @@ const FacultyDashboard = () => {
           type: 'project',
           course: 'CS 401',
           submittedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000),
-          priority: 'high'
+          version: 'v3'
         },
         {
           id: '2',
@@ -48,7 +49,7 @@ const FacultyDashboard = () => {
           type: 'assignment',
           course: 'CS 301',
           submittedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
-          priority: 'medium'
+          version: 'v1'
         },
         {
           id: '3',
@@ -57,7 +58,7 @@ const FacultyDashboard = () => {
           type: 'project',
           course: 'CS 201',
           submittedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
-          priority: 'low'
+          version: 'v2'
         }
       ]);
 
@@ -112,15 +113,6 @@ const FacultyDashboard = () => {
     alert('Feedback submitted successfully!');
   };
 
-  const getPriorityColor = (priority) => {
-    const colors = {
-      high: 'bg-red-100 text-red-800',
-      medium: 'bg-yellow-100 text-yellow-800',
-      low: 'bg-green-100 text-green-800'
-    };
-    return colors[priority] || colors.medium;
-  };
-
   const formatTimeAgo = (date) => {
     const hours = Math.floor((new Date() - date) / (1000 * 60 * 60));
     if (hours < 1) return 'Just now';
@@ -146,12 +138,6 @@ const FacultyDashboard = () => {
       value: 45,
       icon: <Users className="h-5 w-5" />,
       color: 'primary'
-    },
-    {
-      title: 'Avg Response Time',
-      value: '2.3 days',
-      icon: <BarChart3 className="h-5 w-5" />,
-      color: 'info'
     }
   ];
 
@@ -176,10 +162,10 @@ const FacultyDashboard = () => {
       )
     },
     {
-      key: 'priority',
-      header: 'Priority',
+      key: 'version',
+      header: 'Version',
       render: (value) => (
-        <span className={`px-2 py-1 text-xs font-medium rounded-full capitalize ${getPriorityColor(value)}`}>
+        <span className="px-2 py-1 text-xs font-medium rounded-full bg-purple-100 text-purple-800">
           {value}
         </span>
       )
@@ -228,18 +214,27 @@ const FacultyDashboard = () => {
                 {pendingSubmissions.length} pending reviews • {recentReviews.length} completed today
               </p>
             </div>
-            <Link
-              to="/faculty/analytics"
-              className="px-4 py-2 bg-white text-purple-600 rounded-lg hover:bg-purple-50 font-medium transition-colors"
-            >
-              <BarChart3 className="h-4 w-4 mr-2 inline" />
-              Analytics
-            </Link>
+            <div className="flex space-x-3">
+              <Link
+                to="/faculty/classroom"
+                className="px-4 py-2 bg-white text-purple-600 rounded-lg hover:bg-purple-50 font-medium transition-colors"
+              >
+                <BookOpen className="h-4 w-4 mr-2 inline" />
+                Classroom
+              </Link>
+              <Link
+                to="/faculty/analytics"
+                className="px-4 py-2 bg-purple-500 bg-opacity-50 text-white rounded-lg hover:bg-opacity-70 font-medium transition-colors"
+              >
+                <BarChart3 className="h-4 w-4 mr-2 inline" />
+                Analytics
+              </Link>
+            </div>
           </div>
         </div>
 
         {/* Stats */}
-        <StatsGrid stats={stats} columns={4} />
+        <StatsGrid stats={stats} columns={3} />
 
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -277,38 +272,6 @@ const FacultyDashboard = () => {
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Quick Actions */}
-            <div className="bg-white rounded-lg shadow-sm border p-6">
-              <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
-              <div className="space-y-3">
-                <Link
-                  to="/faculty/students"
-                  className="block p-3 bg-blue-50 hover:bg-blue-100 rounded-lg"
-                >
-                  <div className="flex items-center">
-                    <Users className="h-5 w-5 text-blue-600 mr-3" />
-                    <div>
-                      <p className="font-medium text-blue-900">My Students</p>
-                      <p className="text-sm text-blue-600">View all students</p>
-                    </div>
-                  </div>
-                </Link>
-
-                <Link
-                  to="/faculty/analytics"
-                  className="block p-3 bg-green-50 hover:bg-green-100 rounded-lg"
-                >
-                  <div className="flex items-center">
-                    <BarChart3 className="h-5 w-5 text-green-600 mr-3" />
-                    <div>
-                      <p className="font-medium text-green-900">Analytics</p>
-                      <p className="text-sm text-green-600">Performance metrics</p>
-                    </div>
-                  </div>
-                </Link>
-              </div>
-            </div>
-
             {/* Recent Reviews */}
             <div className="bg-white rounded-lg shadow-sm border">
               <div className="p-4 border-b">
@@ -350,6 +313,51 @@ const FacultyDashboard = () => {
                     </div>
                   ))
                 )}
+              </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="bg-white rounded-lg shadow-sm border p-6">
+              <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
+              <div className="space-y-3">
+                <Link
+                  to="/faculty/classroom"
+                  className="block p-3 bg-purple-50 hover:bg-purple-100 rounded-lg"
+                >
+                  <div className="flex items-center">
+                    <BookOpen className="h-5 w-5 text-purple-600 mr-3" />
+                    <div>
+                      <p className="font-medium text-purple-900">Classroom</p>
+                      <p className="text-sm text-purple-600">Manage classes & assignments</p>
+                    </div>
+                  </div>
+                </Link>
+
+                <Link
+                  to="/faculty/students"
+                  className="block p-3 bg-blue-50 hover:bg-blue-100 rounded-lg"
+                >
+                  <div className="flex items-center">
+                    <Users className="h-5 w-5 text-blue-600 mr-3" />
+                    <div>
+                      <p className="font-medium text-blue-900">My Students</p>
+                      <p className="text-sm text-blue-600">View all students</p>
+                    </div>
+                  </div>
+                </Link>
+
+                <Link
+                  to="/faculty/analytics"
+                  className="block p-3 bg-green-50 hover:bg-green-100 rounded-lg"
+                >
+                  <div className="flex items-center">
+                    <BarChart3 className="h-5 w-5 text-green-600 mr-3" />
+                    <div>
+                      <p className="font-medium text-green-900">Analytics</p>
+                      <p className="text-sm text-green-600">Performance metrics</p>
+                    </div>
+                  </div>
+                </Link>
               </div>
             </div>
 

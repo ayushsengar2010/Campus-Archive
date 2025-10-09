@@ -74,21 +74,12 @@ const Sidebar = ({ isOpen = true, onClose, isCollapsed = false, onToggleCollapse
 
   return (
     <>
-      {/* Mobile overlay */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-          onClick={onClose}
-        />
-      )}
-
       {/* Sidebar */}
-      <div className={`fixed top-0 left-0 z-50 ${sidebarWidth} h-full bg-white border-r border-gray-200 shadow-lg transform transition-all duration-300 ease-in-out lg:translate-x-0 lg:static lg:shadow-none ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div className={`fixed top-0 left-0 lg:relative ${sidebarWidth} h-full bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-lg lg:shadow-none transform transition-all duration-300 ease-in-out lg:translate-x-0 ${isOpen ? 'translate-x-0 z-50' : '-translate-x-full z-0'} lg:z-0`}>
         <div className="flex flex-col h-full">
-          {/* Header Section with Logo and Collapse Button */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200">
+          <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700">
             {!isCollapsed && (
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-3 lg:hidden">
                 <div className="w-8 h-8">
                   <img 
                     src={logoImage} 
@@ -97,13 +88,13 @@ const Sidebar = ({ isOpen = true, onClose, isCollapsed = false, onToggleCollapse
                   />
                 </div>
                 <div>
-                  <h1 className="text-sm font-bold text-gray-900">BMU Repository</h1>
+                  <h1 className="text-sm font-bold text-gray-900 dark:text-white">BMU Munjal University</h1>
                 </div>
               </div>
             )}
             
             {isCollapsed && (
-              <div className="w-8 h-8 mx-auto">
+              <div className="w-8 h-8 mx-auto lg:hidden">
                 <img 
                   src={logoImage} 
                   alt="BMU Logo" 
@@ -112,45 +103,15 @@ const Sidebar = ({ isOpen = true, onClose, isCollapsed = false, onToggleCollapse
               </div>
             )}
 
-            {/* Desktop collapse button */}
-            <button
-              onClick={onToggleCollapse}
-              className="hidden lg:flex p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
-              title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            >
-              {isCollapsed ? (
-                <ChevronRight className="w-4 h-4" />
-              ) : (
-                <ChevronLeft className="w-4 h-4" />
-              )}
-            </button>
-
             {/* Mobile close button */}
             <button
               onClick={onClose}
-              className="lg:hidden p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+              className="lg:hidden p-2 rounded-lg text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
-          {/* User Profile Section */}
-          <div className={`${isCollapsed ? 'p-3' : 'p-6'} border-b border-gray-200 bg-gray-50`}>
-            <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'space-x-3'}`}>
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center shadow-sm">
-                <span className="text-sm font-semibold text-white">
-                  {user.name.split(' ').map(n => n[0]).join('').toUpperCase()}
-                </span>
-              </div>
-              {!isCollapsed && (
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-semibold text-gray-900 truncate">{user.name}</p>
-                  <p className="text-xs text-blue-600 capitalize font-medium">{user.role}</p>
-                  <p className="text-xs text-gray-500 truncate">{user.department}</p>
-                </div>
-              )}
-            </div>
-          </div>
 
           {/* Navigation */}
           <nav className={`flex-1 ${isCollapsed ? 'px-2' : 'px-4'} py-6 space-y-2 overflow-y-auto`}>
@@ -164,12 +125,12 @@ const Sidebar = ({ isOpen = true, onClose, isCollapsed = false, onToggleCollapse
                   to={item.href}
                   onClick={onClose}
                   className={`flex items-center ${isCollapsed ? 'justify-center px-3 py-3' : 'px-4 py-3'} text-sm font-medium rounded-xl transition-all duration-200 group relative ${isActive
-                      ? 'bg-blue-100 text-blue-700 shadow-sm'
-                      : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+                      ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 shadow-sm'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
                     }`}
                   title={isCollapsed ? item.name : ''}
                 >
-                  <Icon className={`w-5 h-5 ${isCollapsed ? '' : 'mr-3'} ${isActive ? 'text-blue-600' : 'text-gray-400'}`} />
+                  <Icon className={`w-5 h-5 ${isCollapsed ? '' : 'mr-3'} ${isActive ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400 dark:text-gray-500'}`} />
                   {!isCollapsed && item.name}
                   
                   {/* Tooltip for collapsed state */}
@@ -184,10 +145,10 @@ const Sidebar = ({ isOpen = true, onClose, isCollapsed = false, onToggleCollapse
           </nav>
 
           {/* Logout Button */}
-          <div className={`${isCollapsed ? 'p-2' : 'p-4'} border-t border-gray-200`}>
+          <div className={`${isCollapsed ? 'p-2' : 'p-4'} border-t border-gray-200 dark:border-gray-700`}>
             <button
               onClick={handleLogout}
-              className={`flex items-center w-full ${isCollapsed ? 'justify-center px-3 py-3' : 'px-4 py-3'} text-sm font-medium text-red-600 rounded-xl hover:bg-red-50 transition-colors group relative`}
+              className={`flex items-center w-full ${isCollapsed ? 'justify-center px-3 py-3' : 'px-4 py-3'} text-sm font-medium text-red-600 dark:text-red-400 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors group relative`}
               title={isCollapsed ? 'Sign Out' : ''}
             >
               <LogOut className={`w-5 h-5 ${isCollapsed ? '' : 'mr-3'}`} />

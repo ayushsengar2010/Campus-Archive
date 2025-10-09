@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './hooks/useAuth';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { ROUTES } from './constants';
 
 // Layout components
@@ -13,12 +14,16 @@ import ProtectedRoute from './components/common/ProtectedRoute';
 // Student dashboard components
 import StudentDashboard from './pages/student/Dashboard';
 import StudentClassroom from './pages/student/Classroom';
+import ClassroomDetail from './pages/student/ClassroomDetail';
 import SubmitProject from './pages/student/SubmitProject';
+import SubmitWork from './pages/student/SubmitWork';
 import StudentSubmissions from './pages/student/Submissions';
 
 // Faculty dashboard components
 import FacultyDashboard from './pages/faculty/Dashboard';
 import FacultyAnalytics from './pages/faculty/Analytics';
+import FacultyClassroom from './pages/faculty/Classroom';
+import FacultyClassroomDetail from './pages/faculty/ClassroomDetail';
 
 // Admin dashboard components
 import AdminDashboard from './pages/admin/Dashboard';
@@ -31,8 +36,16 @@ import ResearcherDashboard from './pages/researcher/Dashboard';
 import UploadPaper from './pages/researcher/UploadPaper';
 import Portfolio from './pages/researcher/Portfolio';
 import Collaborations from './pages/researcher/Collaborations';
-import Profile from './pages/researcher/Profile';
+import ResearcherProfile from './pages/researcher/Profile';
 
+// Student profile component
+import StudentProfile from './pages/student/Profile';
+
+// Faculty profile component
+import FacultyProfile from './pages/faculty/Profile';
+
+// Repository component
+import Repository from './pages/Repository';
 
 
 
@@ -67,9 +80,10 @@ const Home = () => {
  */
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <div className="min-h-screen bg-gray-50 overflow-y-auto">
+    <ThemeProvider>
+      <AuthProvider>
+        <Router>
+          <div className="min-h-screen bg-gray-50 dark:bg-gray-900 overflow-y-auto transition-colors duration-300">
           <Routes>
             {/* Public routes */}
             <Route path={ROUTES.LOGIN} element={<Login />} />
@@ -94,10 +108,26 @@ function App() {
               } 
             />
             <Route 
+              path="/student/classroom/:classId" 
+              element={
+                <ProtectedRoute allowedRoles="student">
+                  <ClassroomDetail />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
               path="/student/submit" 
               element={
                 <ProtectedRoute allowedRoles="student">
                   <SubmitProject />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/student/submit-work/:classId/:subjectId" 
+              element={
+                <ProtectedRoute allowedRoles="student">
+                  <SubmitWork />
                 </ProtectedRoute>
               } 
             />
@@ -110,17 +140,12 @@ function App() {
               } 
             />
             
-            {/* Repository Route - placeholder */}
+            {/* Repository Route */}
             <Route 
               path="/repository" 
               element={
                 <ProtectedRoute allowedRoles={['student', 'faculty', 'admin', 'researcher']}>
-                  <AppLayout>
-                    <div className="bg-white rounded-lg shadow p-6">
-                      <h1 className="text-2xl font-bold text-gray-900">Repository</h1>
-                      <p className="text-gray-600">Repository page coming soon...</p>
-                    </div>
-                  </AppLayout>
+                  <Repository />
                 </ProtectedRoute>
               } 
             />
@@ -139,6 +164,25 @@ function App() {
               element={
                 <ProtectedRoute allowedRoles="faculty">
                   <FacultyAnalytics />
+                </ProtectedRoute>
+              } 
+            />
+            
+            {/* Faculty Classroom Routes */}
+            <Route 
+              path="/faculty/classroom" 
+              element={
+                <ProtectedRoute allowedRoles="faculty">
+                  <FacultyClassroom />
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route 
+              path="/faculty/classroom/:classId" 
+              element={
+                <ProtectedRoute allowedRoles="faculty">
+                  <FacultyClassroomDetail />
                 </ProtectedRoute>
               } 
             />
@@ -219,7 +263,37 @@ function App() {
               path="/researcher/profile" 
               element={
                 <ProtectedRoute allowedRoles="researcher">
-                  <Profile />
+                  <ResearcherProfile />
+                </ProtectedRoute>
+              } 
+            />
+            
+            {/* Student Profile Route */}
+            <Route 
+              path="/student/profile" 
+              element={
+                <ProtectedRoute allowedRoles="student">
+                  <StudentProfile />
+                </ProtectedRoute>
+              } 
+            />
+            
+            {/* Faculty Profile Route */}
+            <Route 
+              path="/faculty/profile" 
+              element={
+                <ProtectedRoute allowedRoles="faculty">
+                  <FacultyProfile />
+                </ProtectedRoute>
+              } 
+            />
+            
+            {/* Admin Profile Route - uses Researcher profile for now */}
+            <Route 
+              path="/admin/profile" 
+              element={
+                <ProtectedRoute allowedRoles="admin">
+                  <ResearcherProfile />
                 </ProtectedRoute>
               } 
             />
@@ -230,9 +304,10 @@ function App() {
             {/* Catch all route */}
             <Route path="*" element={<Navigate to={ROUTES.HOME} replace />} />
           </Routes>
-        </div>
-      </Router>
-    </AuthProvider>
+          </div>
+        </Router>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 
