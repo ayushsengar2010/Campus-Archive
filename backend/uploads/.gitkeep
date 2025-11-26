@@ -1,0 +1,10 @@
+# Upload Directory
+
+This directory stores uploaded files.
+
+## Structure
+- `assignments/` - Assignment attachments from faculty
+- `submissions/` - Student submission files
+- `feedback/` - Feedback attachment files
+- `avatars/` - User profile pictures
+- `repository/` - Repository project files

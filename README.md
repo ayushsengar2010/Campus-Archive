@@ -1,6 +1,17 @@
-# 🎓 Campus Archive
+# 🎓 Campus Archive - Full-Stack Academic Platform
 
-A comprehensive academic repository and collaboration platform designed for modern educational institutions. Built with React 18 and Tailwind CSS, featuring role-based dashboards for students, faculty, researchers, and administrators.
+A comprehensive academic repository and collaboration platform with **React 18 frontend** and **Node.js + Express + MongoDB backend**. Designed for modern educational institutions featuring role-based dashboards for students, faculty, researchers, and administrators.
+
+## 🚀 **Full-Stack Integration Complete!**
+
+✅ **REST API** with Node.js + Express  
+✅ **MongoDB Database** with Mongoose ODM  
+✅ **JWT Authentication** & Role-Based Access Control  
+✅ **File Upload System** with Multer  
+✅ **Real-time Notifications System**  
+✅ **Email Service Integration**  
+✅ **Rate Limiting & Security**  
+✅ **Database Seeding Scripts**  
 
 ## ✨ Key Features
 
@@ -58,6 +69,20 @@ A comprehensive academic repository and collaboration platform designed for mode
 - **Tailwind CSS** - Utility-first CSS framework with custom theme
 - **Lucide React** - Beautiful, consistent icon library
 
+### Backend (Fully Integrated! 🎉)
+- **Node.js** - JavaScript runtime
+- **Express.js** - Fast, unopinionated web framework
+- **MongoDB** - NoSQL database with Mongoose ODM
+- **JWT** - Secure authentication with jsonwebtoken
+- **Bcrypt** - Password hashing
+- **Multer** - File upload handling
+- **Express Validator** - Request validation
+- **Helmet** - Security headers
+- **CORS** - Cross-origin resource sharing
+- **Morgan** - HTTP request logger
+- **Rate Limiting** - API protection with express-rate-limit
+- **Nodemailer** - Email notifications
+
 ### State Management & Data
 - **React Context API** - Theme and authentication state
 - **Custom Hooks** - Reusable logic for auth, notifications, repository data
@@ -72,50 +97,88 @@ A comprehensive academic repository and collaboration platform designed for mode
 ### Development Tools
 - **ESLint** - Code quality and consistency
 - **PostCSS** - CSS processing and optimization
-- **Git** - Version control with master branch
+- **Nodemon** - Auto-restart for backend development
+- **Git** - Version control
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- **Node.js** (v16 or higher)
+- **Node.js** (v16 or higher) - [Download](https://nodejs.org/)
+- **MongoDB** (v5 or higher) - [Download](https://www.mongodb.com/try/download/community)
+  - Or use MongoDB Atlas (cloud database)
 - **npm** or **yarn** package manager
 - Modern web browser (Chrome, Firefox, Safari, Edge)
 
-### Installation
+### Quick Start
 
 1. **Clone the repository**
    ```bash
    git clone https://github.com/ayushsengar2010/Campus-Archive.git
-   cd Campus-Archive/academic-repository-platform
+   cd Campus-Archive
    ```
 
-2. **Install dependencies**
+2. **Start MongoDB**
    ```bash
+   # Windows (Run as Administrator)
+   net start MongoDB
+   
+   # macOS
+   brew services start mongodb-community
+   
+   # Linux
+   sudo systemctl start mongod
+   ```
+
+3. **Setup Backend**
+   ```bash
+   cd backend
    npm install
-   ```
-
-3. **Start the development server**
-   ```bash
+   
+   # Create .env file with your configuration
+   # Example:
+   # PORT=5000
+   # MONGODB_URI=mongodb://localhost:27017/campus-archive
+   # JWT_SECRET=your_jwt_secret_key_here
+   # JWT_EXPIRE=7d
+   # NODE_ENV=development
+   
+   # Seed database with sample data (optional)
+   npm run seed
+   
+   # Start backend server
    npm run dev
    ```
+   Backend runs on: `http://localhost:5000`
 
-4. **Open your browser**
+4. **Setup Frontend** (in new terminal)
+   ```bash
+   cd academic-repository-platform
+   npm install
+   npm run dev
+   ```
+   Frontend runs on: `http://localhost:5173`
+
+5. **Open your browser**
    
    Navigate to [http://localhost:5173](http://localhost:5173)
 
 ### 🎭 Demo Accounts
 
-Test the platform with these demo accounts:
+After seeding the database with `npm run seed` in the backend, you can use these demo accounts:
 
 | Role | Email | Password |
 |------|-------|----------|
-| **Student** | student@university.edu | password123 |
-| **Faculty** | faculty@university.edu | password123 |
-| **Admin** | admin@university.edu | password123 |
-| **Researcher** | researcher@university.edu | password123 |
+| **Student** | student@example.com | password123 |
+| **Faculty** | faculty@example.com | password123 |
+| **Admin** | admin@example.com | password123 |
+| **Researcher** | researcher@example.com | password123 |
+
+Or register your own account at [http://localhost:5173/register](http://localhost:5173/register)
 
 ## 📜 Available Scripts
+
+### Frontend Commands
 
 | Command | Description |
 |---------|-------------|
@@ -123,7 +186,15 @@ Test the platform with these demo accounts:
 | `npm run build` | Build optimized production bundle |
 | `npm run preview` | Preview production build locally |
 | `npm run lint` | Run ESLint to check code quality |
-| `npm run lint:fix` | Automatically fix ESLint issues |
+
+### Backend Commands
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server with nodemon (hot reload) |
+| `npm start` | Start production server |
+| `npm run seed` | Seed database with sample data |
+| `npm run clear` | Clear test data from database |
 
 ## 🎯 Key User Workflows
 
@@ -204,104 +275,134 @@ Test the platform with these demo accounts:
 ## 📁 Project Structure
 
 ```
-academic-repository-platform/
-├── public/                    # Static assets
-│   ├── logo.svg              # Application logo
-│   └── vite.svg              # Vite logo
-├── src/
-│   ├── components/           # Reusable components
-│   │   ├── common/          # Shared components
-│   │   │   ├── LoadingSpinner.jsx
-│   │   │   └── ProtectedRoute.jsx
-│   │   ├── forms/           # Form components (future)
-│   │   ├── layout/          # Layout components
-│   │   │   ├── AppLayout.jsx      # Main layout wrapper
-│   │   │   ├── Breadcrumb.jsx     # Navigation breadcrumbs
-│   │   │   ├── Header.jsx         # Top header with search
-│   │   │   └── Sidebar.jsx        # Role-based sidebar
-│   │   └── ui/              # UI components
-│   │       ├── DashboardCard.jsx
-│   │       ├── DataTable.jsx
-│   │       ├── DuplicateWarning.jsx
-│   │       ├── FeedbackModal.jsx
-│   │       ├── FileUpload.jsx
-│   │       ├── Modal.jsx
-│   │       ├── ReportPreview.jsx
-│   │       ├── ReportTemplateEditor.jsx
-│   │       ├── SubmissionDetailModal.jsx  # Faculty review modal
-│   │       └── ThemeToggle.jsx
-│   ├── constants/           # Application constants
-│   │   └── index.js        # Routes, roles, status constants
-│   ├── contexts/           # React contexts
-│   │   └── ThemeContext.jsx
-│   ├── hooks/              # Custom React hooks
-│   │   ├── useAuth.jsx           # Authentication hook
-│   │   ├── useNotifications.js   # Notifications hook
-│   │   └── useRepositoryData.js  # Repository data hook
-│   ├── pages/              # Route pages
-│   │   ├── Repository.jsx        # Public repository page
-│   │   ├── admin/          # Admin dashboard pages
-│   │   │   ├── AuditLogs.jsx
-│   │   │   ├── Dashboard.jsx
-│   │   │   ├── DeadlineManagement.jsx
-│   │   │   ├── Reports.jsx
-│   │   │   └── UserManagement.jsx
-│   │   ├── auth/           # Authentication pages
-│   │   │   ├── Login.jsx
-│   │   │   └── Register.jsx
-│   │   ├── faculty/        # Faculty dashboard pages
-│   │   │   ├── Analytics.jsx
-│   │   │   ├── Dashboard.jsx
-│   │   │   └── ClassroomDetail.jsx
-│   │   ├── researcher/     # Researcher pages
-│   │   │   ├── Collaborations.jsx
-│   │   │   ├── Dashboard.jsx
-│   │   │   ├── Portfolio.jsx
-│   │   │   ├── Profile.jsx
-│   │   │   └── UploadPaper.jsx
-│   │   └── student/        # Student pages
-│   │       ├── Classroom.jsx
-│   │       ├── ClassroomDetail.jsx
-│   │       ├── Dashboard.jsx
-│   │       ├── Submissions.jsx
-│   │       ├── SubmitProject.jsx
-│   │       └── SubmitWork.jsx    # Enhanced with project uploads
-│   ├── services/           # Service layer
-│   │   ├── apiService.js
-│   │   ├── emailTemplates.js
-│   │   ├── notificationService.js
-│   │   └── reportService.js
-│   ├── types/              # Type definitions
-│   │   └── index.js
-│   ├── utils/              # Utility functions
-│   │   ├── auth.js
-│   │   ├── cn.js
-│   │   └── duplicateDetection.js
-│   ├── App.jsx             # Main app component with routing
-│   ├── main.jsx            # Application entry point
-│   └── index.css           # Global styles
-├── .gitignore
-├── eslint.config.js        # ESLint configuration
-├── index.html              # HTML entry point
-├── package.json            # Dependencies
-├── postcss.config.js       # PostCSS configuration
-├── tailwind.config.js      # Tailwind CSS configuration
-├── vite.config.js          # Vite configuration
-├── README.md               # This file
-├── SIMPLIFICATION_SUMMARY.md
-├── REPOSITORY_UPLOAD_FEATURE.md
-└── PROJECT_SUBMISSION_FEATURE.md
+CampusArchive/
+├── academic-repository-platform/  # Frontend (React + Vite)
+│   ├── public/                    # Static assets
+│   ├── src/
+│   │   ├── components/           # Reusable components
+│   │   │   ├── common/          # Shared components
+│   │   │   ├── forms/           # Form components
+│   │   │   ├── layout/          # Layout components
+│   │   │   │   ├── AppLayout.jsx
+│   │   │   │   ├── Breadcrumb.jsx
+│   │   │   │   ├── Header.jsx
+│   │   │   │   └── Sidebar.jsx
+│   │   │   └── ui/              # UI components
+│   │   ├── constants/           # Application constants
+│   │   ├── contexts/            # React contexts
+│   │   │   ├── AppContext.jsx
+│   │   │   ├── ThemeContext.jsx
+│   │   │   └── ToastContext.jsx
+│   │   ├── hooks/               # Custom React hooks
+│   │   │   ├── useAuth.jsx
+│   │   │   ├── useForm.js
+│   │   │   ├── useNotifications.js
+│   │   │   └── useRepositoryData.js
+│   │   ├── pages/               # Route pages
+│   │   │   ├── admin/           # Admin pages
+│   │   │   ├── auth/            # Authentication pages
+│   │   │   ├── faculty/         # Faculty pages
+│   │   │   ├── researcher/      # Researcher pages
+│   │   │   └── student/         # Student pages
+│   │   ├── services/            # API services
+│   │   │   ├── apiService.js
+│   │   │   ├── emailTemplates.js
+│   │   │   ├── notificationService.js
+│   │   │   └── reportService.js
+│   │   ├── types/               # Type definitions
+│   │   ├── utils/               # Utility functions
+│   │   ├── App.jsx
+│   │   ├── main.jsx
+│   │   └── index.css
+│   ├── package.json
+│   └── vite.config.js
+│
+├── backend/                       # Backend (Node.js + Express)
+│   ├── controllers/              # Request handlers
+│   │   ├── assignment.controller.js
+│   │   ├── auth.controller.js
+│   │   ├── classroom.controller.js
+│   │   ├── notification.controller.js
+│   │   ├── repository.controller.js
+│   │   ├── submission.controller.js
+│   │   └── user.controller.js
+│   ├── middleware/               # Express middleware
+│   │   ├── auth.middleware.js
+│   │   ├── error.middleware.js
+│   │   ├── rateLimiter.middleware.js
+│   │   ├── upload.middleware.js
+│   │   └── validation.middleware.js
+│   ├── models/                   # Mongoose models
+│   │   ├── Assignment.model.js
+│   │   ├── Classroom.model.js
+│   │   ├── Notification.model.js
+│   │   ├── Repository.model.js
+│   │   ├── Submission.model.js
+│   │   └── User.model.js
+│   ├── routes/                   # API routes
+│   │   ├── assignment.routes.js
+│   │   ├── auth.routes.js
+│   │   ├── classroom.routes.js
+│   │   ├── notification.routes.js
+│   │   ├── repository.routes.js
+│   │   ├── submission.routes.js
+│   │   └── user.routes.js
+│   ├── scripts/                  # Utility scripts
+│   │   ├── clearTestData.js
+│   │   └── seedDatabase.js
+│   ├── uploads/                  # File upload directories
+│   │   ├── assignments/
+│   │   ├── avatars/
+│   │   ├── feedback/
+│   │   ├── repository/
+│   │   └── submissions/
+│   ├── server.js                 # Express server
+│   └── package.json
+│
+└── README.md
 ```
 
 ## 🔧 Configuration
 
-### Environment Variables
+### Backend Environment Variables
 
-Create a `.env` file in the root directory (optional for development):
+Create a `.env` file in the `backend/` directory:
 
 ```env
-# API Configuration (Future)
-VITE_API_BASE_URL=http://localhost:3000/api
+# Server Configuration
+PORT=5000
+NODE_ENV=development
+
+# Database Configuration
+MONGODB_URI=mongodb://localhost:27017/campus-archive
+# Or use MongoDB Atlas:
+# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/campus-archive
+
+# JWT Configuration
+JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
+JWT_EXPIRE=7d
+
+# Email Configuration (Optional)
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASSWORD=your-app-password
+
+# File Upload Configuration
+MAX_FILE_SIZE=10485760  # 10MB in bytes
+UPLOAD_PATH=./uploads
+
+# CORS Configuration
+CORS_ORIGIN=http://localhost:5173
+```
+
+### Frontend Environment Variables
+
+Create a `.env` file in the `academic-repository-platform/` directory (optional):
+
+```env
+# API Configuration
+VITE_API_BASE_URL=http://localhost:5000/api
 
 # Application Info
 VITE_APP_NAME=Campus Archive
@@ -330,8 +431,111 @@ theme: {
 }
 ```
 
-## 📚 Documentation
+## 📚 API Documentation
 
+### Authentication Endpoints
+- `POST /api/auth/register` - Register new user
+- `POST /api/auth/login` - User login
+- `GET /api/auth/me` - Get current user
+- `PUT /api/auth/updateprofile` - Update user profile
+
+### User Management
+- `GET /api/users` - Get all users (Admin only)
+- `GET /api/users/:id` - Get user by ID
+- `PUT /api/users/:id` - Update user
+- `DELETE /api/users/:id` - Delete user (Admin only)
+
+### Classroom Management
+- `GET /api/classrooms` - Get all classrooms
+- `POST /api/classrooms` - Create classroom (Faculty)
+- `GET /api/classrooms/:id` - Get classroom details
+- `PUT /api/classrooms/:id` - Update classroom
+- `DELETE /api/classrooms/:id` - Delete classroom
+- `POST /api/classrooms/:id/join` - Join classroom (Student)
+
+### Assignment Management
+- `GET /api/assignments` - Get all assignments
+- `POST /api/assignments` - Create assignment (Faculty)
+- `GET /api/assignments/:id` - Get assignment details
+- `PUT /api/assignments/:id` - Update assignment
+- `DELETE /api/assignments/:id` - Delete assignment
+
+### Submission Management
+- `GET /api/submissions` - Get all submissions
+- `POST /api/submissions` - Submit assignment (Student)
+- `GET /api/submissions/:id` - Get submission details
+- `PUT /api/submissions/:id` - Update submission status (Faculty)
+- `DELETE /api/submissions/:id` - Delete submission
+
+### Repository Management
+- `GET /api/repository` - Get all repository items (Public)
+- `POST /api/repository` - Add to repository (Faculty)
+- `GET /api/repository/:id` - Get repository item details
+- `DELETE /api/repository/:id` - Remove from repository (Admin)
+
+### Notification Management
+- `GET /api/notifications` - Get user notifications
+- `PUT /api/notifications/:id/read` - Mark as read
+- `DELETE /api/notifications/:id` - Delete notification
+
+For detailed API documentation with request/response examples, see `/backend/README.md`
+
+## 🔒 Security Features
+
+- **JWT Authentication** - Secure token-based authentication
+- **Password Hashing** - Bcrypt with salt rounds
+- **Input Validation** - Express-validator for all inputs
+- **Rate Limiting** - Protection against brute force attacks
+- **CORS** - Configured cross-origin resource sharing
+- **Helmet** - Security headers for Express
+- **File Upload Validation** - Size and type restrictions
+- **Role-Based Access Control** - Protected routes by user role
+- **Error Handling** - Secure error messages (no sensitive data exposure)
+
+## 🚀 Deployment
+
+### Frontend Deployment (Vercel/Netlify)
+```bash
+cd academic-repository-platform
+npm run build
+# Deploy the 'dist' folder
+```
+
+### Backend Deployment (Heroku/Railway/Render)
+```bash
+cd backend
+# Set environment variables on your platform
+# Deploy using Git or platform CLI
+```
+
+### Database (MongoDB Atlas)
+1. Create a free cluster at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+2. Whitelist your IP address
+3. Update `MONGODB_URI` in your `.env` file
+
+## 🧪 Testing
+
+### Running the Seed Script
+```bash
+cd backend
+npm run seed
+```
+This creates:
+- 4 demo users (student, faculty, admin, researcher)
+- 2 sample classrooms
+- 5 sample assignments
+- 10 sample submissions
+- 5 repository items
+
+### Clearing Test Data
+```bash
+cd backend
+npm run clear
+```
+
+## 📚 Additional Documentation
+
+- **[Backend API Documentation](./backend/README.md)** - Complete API reference
 - **[Repository Upload Feature](./REPOSITORY_UPLOAD_FEATURE.md)** - How faculty upload approved projects to repository
 - **[Project Submission Feature](./PROJECT_SUBMISSION_FEATURE.md)** - Structured project submissions for students
 - **[Simplification Summary](./SIMPLIFICATION_SUMMARY.md)** - Code simplification and optimization history
@@ -411,17 +615,29 @@ We welcome contributions! Please follow these guidelines:
 - [x] **Bookmark system** 🆕
 - [x] **GitHub integration links** 🆕
 
-### 🔄 Phase 6: Advanced Features (In Progress)
-- [ ] Backend API integration
-- [ ] Real database integration
-- [ ] File storage system (AWS S3 / Azure Blob)
-- [ ] Email notification system
+### ✅ Phase 6: Backend Integration (Completed)
+- [x] REST API with Express.js
+- [x] MongoDB database setup
+- [x] User authentication & authorization
+- [x] File upload endpoints
+- [x] Classroom management APIs
+- [x] Assignment & submission APIs
+- [x] Notification system APIs
+- [x] Repository management APIs
+- [x] Database seeding scripts
+- [x] Error handling & validation
+
+### 🔄 Phase 7: Advanced Features (In Progress)
+- [x] Email notification system
+- [x] Rate limiting & security
+- [ ] Real-time updates with WebSocket
 - [ ] Advanced analytics dashboard
 - [ ] PDF report generation
 - [ ] Version control for submissions
-- [ ] Plagiarism detection
+- [ ] Plagiarism detection integration
+- [ ] Cloud storage integration (AWS S3/Azure)
 
-### 📋 Phase 7: Future Enhancements
+### 📋 Phase 8: Future Enhancements
 - [ ] Real-time collaboration features
 - [ ] Video submission support
 - [ ] Live code editor for coding assignments
@@ -433,36 +649,44 @@ We welcome contributions! Please follow these guidelines:
 - [ ] Blockchain-based certificates
 - [ ] Multi-language support
 
-## 🐛 Known Issues
+## 🐛 Known Issues & Limitations
 
-- Mock data used for development (backend integration pending)
-- File uploads are client-side only (no actual server storage)
-- Authentication tokens are stored in localStorage (implement httpOnly cookies for production)
-- No real-time updates (implement WebSocket for live features)
+- File uploads limited to 10MB (configurable in backend)
+- Email notifications require SMTP configuration
+- No WebSocket integration yet (real-time updates pending)
+- Plagiarism detection not implemented
+- Mobile app not available (web-responsive only)
 
 ## 📊 Project Statistics
 
-- **Total Components**: 25+
+- **Total Components**: 30+
 - **Pages**: 20+
-- **Custom Hooks**: 3
-- **Mock Projects**: 8
+- **API Endpoints**: 40+
+- **Custom Hooks**: 4
+- **Backend Controllers**: 7
+- **Database Models**: 6
+- **Middleware Functions**: 5
 - **Demo Users**: 4 (Student, Faculty, Admin, Researcher)
 - **Supported File Types**: PDF, DOC, DOCX, PPT, PPTX, ZIP, RAR, JPG, PNG, GIF
-- **Lines of Code**: ~5,000+
+- **Lines of Code**: ~10,000+
 
 ## 🎓 Educational Value
 
 This project demonstrates:
-- Modern React development patterns
-- Component-based architecture
-- State management with hooks and context
-- Responsive design with Tailwind CSS
-- Form handling and validation
-- File upload functionality
-- Role-based access control
-- Routing and navigation
-- UI/UX best practices
-- Code organization and project structure
+- **Full-Stack Development** - Complete MERN stack implementation
+- **RESTful API Design** - Proper endpoint structure and HTTP methods
+- **Database Design** - MongoDB schema design with relationships
+- **Authentication & Authorization** - JWT-based security with role-based access
+- **File Upload Handling** - Multer integration with validation
+- **Modern React Patterns** - Hooks, context API, and custom hooks
+- **Component Architecture** - Reusable, modular component design
+- **State Management** - Context API and hooks for global state
+- **Responsive Design** - Mobile-first approach with Tailwind CSS
+- **Form Handling** - Validation and error handling
+- **Error Handling** - Centralized error middleware
+- **Security Best Practices** - Helmet, CORS, rate limiting
+- **Code Organization** - Clean separation of concerns
+- **API Documentation** - Well-documented endpoints
 
 ## 📄 License
 
@@ -492,18 +716,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-## 👨‍💻 Author
+## 👨‍💻 Author & Contact
 
 **Ayush Sengar**
 - GitHub: [@ayushsengar2010](https://github.com/ayushsengar2010)
 - Repository: [Campus-Archive](https://github.com/ayushsengar2010/Campus-Archive)
+- Email: Contact via GitHub
 
-## � Acknowledgments
+## 🙏 Acknowledgments
 
 - **React Team** - For the amazing React library
 - **Vite Team** - For the blazing fast build tool
 - **Tailwind CSS** - For the utility-first CSS framework
 - **Lucide Icons** - For the beautiful icon set
+- **MongoDB** - For the flexible NoSQL database
+- **Express.js** - For the minimal web framework
 - **Open Source Community** - For inspiration and resources
 
 ---
@@ -512,6 +739,12 @@ SOFTWARE.
 
 **⭐ If you find this project helpful, please give it a star! ⭐**
 
+![GitHub stars](https://img.shields.io/github/stars/ayushsengar2010/Campus-Archive?style=social)
+![GitHub forks](https://img.shields.io/github/forks/ayushsengar2010/Campus-Archive?style=social)
+![GitHub watchers](https://img.shields.io/github/watchers/ayushsengar2010/Campus-Archive?style=social)
+
 Made with ❤️ by Ayush Sengar
+
+[⬆ Back to Top](#-campus-archive---full-stack-academic-platform)
 
 </div>
